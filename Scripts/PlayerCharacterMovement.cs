@@ -16,25 +16,22 @@ public class PlayerCharacterMovement : MonoBehaviour {
 	void Start () {
 		rb = GetComponent<Rigidbody2D>();
 		initialScale = transform.localScale;
-		Debug.Log("initial scale = "+initialScale.y);
 		reverseScale = new Vector3(-initialScale.x, initialScale.y, initialScale.z);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		// Debug.Log("car vel = "+rb.velocity);
-
 		if(active){
 
 			if(TouchControls.RightPressed) {
 
-				rb.velocity = new Vector2(speed, 0);
+				rb.velocity = new Vector2(speed, rb.velocity.y);
 				transform.localScale = initialScale;
 				// animator.SetTrigger("MakeWalk");
 
 			} else if (TouchControls.LeftPressed){
-				rb.velocity = new Vector2(-speed, 0);
+				rb.velocity = new Vector2(-speed, rb.velocity.y);
 				transform.localScale = reverseScale;
 				// animator.SetTrigger("MakeWalk");
 			} else {
@@ -49,4 +46,5 @@ public class PlayerCharacterMovement : MonoBehaviour {
 	
 
 	}
+
 }
