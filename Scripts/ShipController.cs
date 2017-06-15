@@ -123,6 +123,14 @@ public class ShipController : MonoBehaviour {
 				DustParticles.transform.position = nearGroundHit.point;
 			}
 
+			// if( landingDistance ){
+			// 	animator.SetTrigger("MakeLand");
+			// } else {
+			// 	animator.SetTrigger("MakeFly");
+			// }
+
+			animator.SetBool("NearGround", landingDistance);
+
 		}
 	}
 
@@ -142,7 +150,6 @@ public class ShipController : MonoBehaviour {
 		active = true;
 		StartCoroutine("Blink");
 		Debug.Log("activating "+gameObject.name);
-		animator.SetTrigger("MakeFly");
 	}
 
     void Hide(){
