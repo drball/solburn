@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//--add this script to any player that can use a platform
+
 public class MovedByPlatform : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D other){

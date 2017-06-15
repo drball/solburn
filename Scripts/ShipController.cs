@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ShipController : MonoBehaviour {
@@ -45,6 +45,8 @@ public class ShipController : MonoBehaviour {
 
 			ThrustParticlesLeft.enableEmission = false;
 			ThrustParticlesRight.enableEmission = false;
+
+			
 
 			if (TouchControls.LeftPressed && TouchControls.RightPressed){
 				Debug.Log("both pressed!!!");
