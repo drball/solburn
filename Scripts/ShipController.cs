@@ -15,10 +15,13 @@ public class ShipController : MonoBehaviour {
 
 	public ParticleSystem ThrustParticlesLeft;
 	public ParticleSystem ThrustParticlesRight;
+	public GameObject ThrusterL;
+	public GameObject ThrusterR;
 
 	public float speed = 10f;
 	private float upSpeed;
 	public float rotationSpeed = 6f;
+	public Animator animator;
 
 	// Use this for initialization
 	void Start () {
@@ -31,7 +34,7 @@ public class ShipController : MonoBehaviour {
 		ThrustParticlesLeft.enableEmission = false;
 		ThrustParticlesRight.enableEmission = false;
 
-		upSpeed = speed * 1.25f;
+		upSpeed = speed * 2.5f;
 
 	}
 
@@ -40,46 +43,74 @@ public class ShipController : MonoBehaviour {
 	void Update () {
 
 		// Debug.Log("ship vel = "+rb.velocity);
+		Debug.Log(" transform.rotation "+ transform.rotation.z);
+		ThrusterL.SetActive(false);
+		ThrusterR.SetActive(false);
 
 		if(active){
 
-			ThrustParticlesLeft.enableEmission = false;
-			ThrustParticlesRight.enableEmission = false;
-
-			
+			// ThrustParticlesLeft.enableEmission = false;
+			// ThrustParticlesRight.enableEmission = false;
 
 			if (TouchControls.LeftPressed && TouchControls.RightPressed){
 				Debug.Log("both pressed!!!");
 
 				rb.AddRelativeForce (Vector2.up * upSpeed);
 
-				ThrustParticlesLeft.enableEmission = true;
-				ThrustParticlesRight.enableEmission = true;
+				// ThrustParticlesLeft.enableEmission = true;
+				// ThrustParticlesRight.enableEmission = true;
+
+				ThrusterL.SetActive(true);
+				ThrusterR.SetActive(true);
+
+				if( transform.rotation.z > 0.1f ){
+					rb.AddTorque(-rotationSpeed*2,0);
+				} else if ( transform.rotation.z < -0.1f){
+					rb.AddTorque(rotationSpeed*2,0);
+				}
+
 			} else {
 				if(TouchControls.LeftPressed) {
 
-					rb.AddTorque(-rotationSpeed,0);
-					rb.AddRelativeForce (Vector2.up * speed);
-				
-					ThrustParticlesLeft.enableEmission = true;
-
 					
+					rb.AddRelativeForce (Vector2.up * upSpeed);
+					rb.AddRelativeForce (Vector2.left * speed);
+				
+					// ThrustParticlesLeft.enableEmission = true;
+					ThrusterR.SetActive(true);
+
+					if( transform.rotation.z < 0.15f ){
+						rb.AddTorque(rotationSpeed,0);
+					}
 
 				} else if (TouchControls.RightPressed){
 
-					rb.AddTorque(rotationSpeed,0);
-					rb.AddRelativeForce (Vector2.up * speed);
+					rb.AddRelativeForce (Vector2.up * upSpeed);
+					rb.AddRelativeForce (Vector2.right * speed);
 
-					ThrustParticlesRight.enableEmission = true;
+					// ThrustParticlesRight.enableEmission = true;
+					ThrusterL.SetActive(true);
 
-				} 
+					if( transform.rotation.z > -0.15f ){
+						rb.AddTorque(-rotationSpeed,0);
+					}
+
+				} else {
+
+					ThrusterL.SetActive(false);
+					ThrusterR.SetActive(false);
+
+					if( transform.rotation.z > 0.1f ){
+						rb.AddTorque(-rotationSpeed*2,0);
+					} else if ( transform.rotation.z < -0.1f){
+						rb.AddTorque(rotationSpeed*2,0);
+					}
+
+				}
 			}
-
-
 		}
-	
-
 	}
+
 
 	public void Respawn(){
 		Debug.Log("Respawn player");
@@ -96,6 +127,7 @@ public class ShipController : MonoBehaviour {
 		active = true;
 		StartCoroutine("Blink");
 		Debug.Log("activating "+gameObject.name);
+		animator.SetTrigger("MakeFly");
 	}
 
     void Hide(){
