@@ -22,6 +22,11 @@ public class ShipController : MonoBehaviour {
 	private float upSpeed;
 	public float rotationSpeed = 6f;
 	public Animator animator;
+	public Transform RaycastBottomFar;
+	public Transform RaycastBottomNear;
+	public bool nearGround;
+	public bool landingDistance;
+	public ParticleSystem DustParticles;
 
 	// Use this for initialization
 	void Start () {
@@ -42,10 +47,10 @@ public class ShipController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		// Debug.Log("ship vel = "+rb.velocity);
-		Debug.Log(" transform.rotation "+ transform.rotation.z);
+
 		ThrusterL.SetActive(false);
 		ThrusterR.SetActive(false);
+		DustParticles.enableEmission = false;
 
 		if(active){
 
@@ -53,7 +58,6 @@ public class ShipController : MonoBehaviour {
 			// ThrustParticlesRight.enableEmission = false;
 
 			if (TouchControls.LeftPressed && TouchControls.RightPressed){
-				Debug.Log("both pressed!!!");
 
 				rb.AddRelativeForce (Vector2.up * upSpeed);
 
@@ -108,6 +112,17 @@ public class ShipController : MonoBehaviour {
 
 				}
 			}
+
+			RaycastHit2D nearGroundHit = Physics2D.Linecast(transform.position, RaycastBottomFar.position, 1 << LayerMask.NameToLayer("Ground"));
+			landingDistance = Physics2D.Linecast(transform.position, RaycastBottomNear.position, 1 << LayerMask.NameToLayer("Ground"));
+		
+			if (nearGroundHit)
+			{
+				Debug.Log("HIT "+nearGroundHit.point);
+				DustParticles.enableEmission = true;
+				DustParticles.transform.position = nearGroundHit.point;
+			}
+
 		}
 	}
 
