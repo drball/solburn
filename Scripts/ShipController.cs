@@ -45,7 +45,7 @@ public class ShipController : MonoBehaviour {
 
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 
 
 		ThrusterL.SetActive(false);
@@ -123,12 +123,6 @@ public class ShipController : MonoBehaviour {
 				DustParticles.transform.position = nearGroundHit.point;
 			}
 
-			// if( landingDistance ){
-			// 	animator.SetTrigger("MakeLand");
-			// } else {
-			// 	animator.SetTrigger("MakeFly");
-			// }
-
 			animator.SetBool("NearGround", landingDistance);
 
 		}
@@ -150,6 +144,7 @@ public class ShipController : MonoBehaviour {
 		active = true;
 		StartCoroutine("Blink");
 		Debug.Log("activating "+gameObject.name);
+		animator.SetBool("Active",active);
 	}
 
     void Hide(){
@@ -187,6 +182,7 @@ public class ShipController : MonoBehaviour {
 
     void DeactivateVehicle (){
     	active = false;
+    	animator.SetBool("Active",active);
     }
 
 

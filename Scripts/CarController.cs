@@ -87,6 +87,20 @@ public class CarController : MonoBehaviour {
 
 	}
 
+	void FixedUpdate () {
+
+
+		if(active){
+
+			//--constrain the rotation
+			if( transform.rotation.z > 0.1f ){
+				transform.rotation = Vector3(0,0,0.1f);
+			} else if ( transform.rotation.z < -0.1f){
+				transform.rotation.z = Vector3(0,0,-0.1f);
+			}
+		}
+	}
+
 
 	public void Respawn(){
 		Debug.Log("Respawn player to "+respawnPos);
