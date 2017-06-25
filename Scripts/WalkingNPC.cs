@@ -11,7 +11,7 @@ public class WalkingNPC : MonoBehaviour {
 	public enum walkingDirections {Right = 0, Left = 1} 
 	public walkingDirections walkingDirection= walkingDirections.Right & walkingDirections.Left;
 	public Transform RaycastEnd;
-	public bool hitEdge; 
+	private bool hitEdge; 
 	public RagdollWhenHit RagdollScript;
 
 	// Use this for initialization

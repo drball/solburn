@@ -16,10 +16,10 @@ public class CameraController : MonoBehaviour
     private Vector3 m_CurrentVelocity;
     private Vector3 m_LookAheadPos;
 
-    private float closeZoom = 3.5f;
-    private float farZoom = 6.5f;
-    private float midZoom = 5f;
-
+    private float closeZoom = 5f;
+    private float midZoom = 6.5f;
+    private float farZoom = 10f;
+    
     public float zoomTarget;
 
     public Camera camera;
@@ -71,7 +71,8 @@ public class CameraController : MonoBehaviour
         m_LastTargetPosition = target.position;
 
 
-    	camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, zoomTarget, Time.deltaTime);
+        // camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, zoomTarget, Time.deltaTime);
+    	camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomTarget, Time.deltaTime);
         
     }
 
@@ -79,7 +80,7 @@ public class CameraController : MonoBehaviour
 
 		target = other.transform;
 
-		if(other.name == "Ship"){
+		if(other.name == "Ship" || other.name == "UFO"){
 			Debug.Log("camera zoom out");
 			zoomTarget = farZoom;
 		} else if (other.name == "Van") {

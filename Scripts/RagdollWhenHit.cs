@@ -10,7 +10,7 @@ public class RagdollWhenHit : MonoBehaviour {
 	public GameObject body;
 	private Rigidbody2D rb;
 	private BoxCollider2D collider;
-	public Renderer rend;
+	// public Renderer rend;
 	public bool alive = true;
 	public Vector2 initialPosition;
 	public Rigidbody2D[] childRbs;
@@ -24,7 +24,7 @@ public class RagdollWhenHit : MonoBehaviour {
 		childRbs = GetComponentsInChildren<Rigidbody2D>( ) as Rigidbody2D[];
 		childRends = GetComponentsInChildren<Renderer>( ) as Renderer[];
 		initialPosition = transform.localPosition;
-		rend = GetComponent<Renderer>();
+		// rend = GetComponent<Renderer>();
 	}
 	
 	// Update is called once per frame
@@ -59,6 +59,8 @@ public class RagdollWhenHit : MonoBehaviour {
 		        Debug.Log("hit force = "+force);
 
 		        rb.AddForce(force, ForceMode2D.Impulse);
+
+                Debug.Log("add force "+force+" to npc");
 
 		        // Invoke("Reset",2);
 

@@ -6,19 +6,17 @@ public class CarController : MonoBehaviour {
 	public WheelJoint2D FrontWheel;
 	public WheelJoint2D BackWheel;
 
-	JointMotor2D motorFront;
-	JointMotor2D motorBack;
+	// JointMotor2D motorFront;
+	// JointMotor2D motorBack;
 
 	public float speedForward;
 	public float speedBackward;
-	public float torqueForward;
-	public float torqueBackward;
-	public bool TractionFront = true;
-	public bool TractionBack = true;
 	public Vector2 respawnPos;
 	public bool active = false;
 	public Renderer[] childRends;
 	public TouchControls TouchControls;
+	public GameObject ThrusterL;
+	// public GameObject ThrusterR;
 
 	private Vector2 initialPos;
 	public Renderer rend;
@@ -26,7 +24,7 @@ public class CarController : MonoBehaviour {
 	private Vector2 frontWheelInitialPos;
 	private Vector2 backWheelInitialPos;
 
-	// private Rigidbody2D rb;
+	public Rigidbody2D rb;
 
 	// Use this for initialization
 	void Start () {
@@ -36,67 +34,96 @@ public class CarController : MonoBehaviour {
 
 		childRends = GetComponentsInChildren<Renderer>( ) as Renderer[];
 
-		frontWheelInitialPos = FrontWheel.transform.localPosition;
-		backWheelInitialPos = BackWheel.transform.localPosition;
+		if(FrontWheel){
+			frontWheelInitialPos = FrontWheel.transform.localPosition;
+			backWheelInitialPos = BackWheel.transform.localPosition;
+		}
+		
+		if(ThrusterL){
+			ThrusterL.SetActive(false);
+		}
 	}
 
 	
 	// Update is called once per frame
 	void Update () {
 
-		// Debug.Log("car vel = "+rb.velocity);
 
-		if(active){
+		// if(active){
 
-			if(TouchControls.RightPressed) {
+		// 	if(TouchControls.RightPressed) {
 
-				if(TractionFront){
-					motorFront.motorSpeed = speedForward*-1;
-					motorFront.maxMotorTorque = torqueForward;
-					FrontWheel.motor = motorFront;
-				}
+		// 		// if(TractionFront){
+		// 		// 	motorFront.motorSpeed = speedForward*-1;
+		// 		// 	motorFront.maxMotorTorque = torqueForward;
+		// 		// 	FrontWheel.motor = motorFront;
+		// 		// }
 				
-				if(TractionBack){
-					motorBack.motorSpeed = speedForward*-1;
-					motorBack.maxMotorTorque = torqueForward;
-					BackWheel.motor = motorBack;
-				}
+		// 		// if(TractionBack){
+		// 		// 	motorBack.motorSpeed = speedForward*-1;
+		// 		// 	motorBack.maxMotorTorque = torqueForward;
+		// 		// 	BackWheel.motor = motorBack;
+		// 		// }
 
 				
+		// 	} else if (TouchControls.LeftPressed){
 
-			} else if (TouchControls.LeftPressed){
+		// 		// if(TractionFront){
+		// 		// 	motorFront.motorSpeed = speedBackward*-1;;
+		// 		// 	motorFront.maxMotorTorque = torqueBackward;
+		// 		// 	FrontWheel.motor = motorFront;
+		// 		// }
 
-				if(TractionFront){
-					motorFront.motorSpeed = speedBackward*-1;;
-					motorFront.maxMotorTorque = torqueBackward;
-					FrontWheel.motor = motorFront;
-				}
+		// 		// if(TractionBack){
+		// 		// 	motorBack.motorSpeed = speedBackward*-1;;
+		// 		// 	motorBack.maxMotorTorque = torqueBackward;
+		// 		// 	BackWheel.motor = motorBack;
+		// 		// }
 
-				if(TractionBack){
-					motorBack.motorSpeed = speedBackward*-1;;
-					motorBack.maxMotorTorque = torqueBackward;
-					BackWheel.motor = motorBack;
-				}
+		// 	} else {
+		// 		// BackWheel.useMotor = false;
+		// 		// FrontWheel.useMotor = false;
+		// 	}
 
-			} else {
-				BackWheel.useMotor = false;
-				FrontWheel.useMotor = false;
-			}
-
-		}
+		// }
 
 	}
 
 	void FixedUpdate () {
 
-
 		if(active){
+			Debug.Log("sfsddfsfdssdf");
+
+			if(ThrusterL){
+				ThrusterL.SetActive(false);
+			}
+
+			
+
+			if(TouchControls.RightPressed) {
+
+				rb.AddForce(transform.right * speedForward);
+
+				if(ThrusterL){
+					ThrusterL.SetActive(true);
+				}
+
+			} else if (TouchControls.LeftPressed){
+
+				rb.AddForce(transform.right * -speedBackward);
+				// ThrusterR.SetActive(true);
+			}
+
+			//--set a max speed
+			rb.velocity = Vector2.ClampMagnitude(rb.velocity, speedForward/10);
 
 			//--constrain the rotation
-			if( transform.rotation.z > 0.1f ){
-				transform.rotation = Vector3(0,0,0.1f);
-			} else if ( transform.rotation.z < -0.1f){
-				transform.rotation.z = Vector3(0,0,-0.1f);
+			if( transform.rotation.z > 0.3f ){
+				Debug.Log("too far right");
+				rb.AddTorque(-4,0);
+			} else if ( transform.rotation.z < -0.3f){
+				rb.AddTorque(4,0);
+				Debug.Log("too far left");
 			}
 		}
 	}

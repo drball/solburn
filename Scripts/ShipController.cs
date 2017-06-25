@@ -43,6 +43,23 @@ public class ShipController : MonoBehaviour {
 
 	}
 
+	void Update () {
+		DustParticles.enableEmission = false;
+
+		RaycastHit2D nearGroundHit = Physics2D.Linecast(transform.position, RaycastBottomFar.position, 1 << LayerMask.NameToLayer("Ground"));
+		landingDistance = Physics2D.Linecast(transform.position, RaycastBottomNear.position, 1 << LayerMask.NameToLayer("Ground"));
+		// Debug.DrawLine(transform.position, RaycastBottomNear.position, Color.red);
+
+		if (nearGroundHit)
+		{
+			Debug.Log("HIT "+nearGroundHit.point);
+			DustParticles.enableEmission = true;
+			DustParticles.transform.position = nearGroundHit.point;
+		}
+
+		animator.SetBool("NearGround", landingDistance);
+	}
+
 	
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -50,7 +67,6 @@ public class ShipController : MonoBehaviour {
 
 		ThrusterL.SetActive(false);
 		ThrusterR.SetActive(false);
-		DustParticles.enableEmission = false;
 
 		if(active){
 
@@ -112,18 +128,6 @@ public class ShipController : MonoBehaviour {
 
 				}
 			}
-
-			RaycastHit2D nearGroundHit = Physics2D.Linecast(transform.position, RaycastBottomFar.position, 1 << LayerMask.NameToLayer("Ground"));
-			landingDistance = Physics2D.Linecast(transform.position, RaycastBottomNear.position, 1 << LayerMask.NameToLayer("Ground"));
-		
-			if (nearGroundHit)
-			{
-				Debug.Log("HIT "+nearGroundHit.point);
-				DustParticles.enableEmission = true;
-				DustParticles.transform.position = nearGroundHit.point;
-			}
-
-			animator.SetBool("NearGround", landingDistance);
 
 		}
 	}
