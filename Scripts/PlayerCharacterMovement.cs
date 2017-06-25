@@ -40,11 +40,13 @@ public class PlayerCharacterMovement : MonoBehaviour {
 
 			animator.SetFloat("Speed", Mathf.Abs(rb.velocity.magnitude));
 
-
-		
 		}
 	
 
+	}
+
+	public void DoAnimation(){
+		animator.SetTrigger("MakePullSwitch");
 	}
 
 }
