@@ -17,6 +17,9 @@ public class CarController : MonoBehaviour {
 	public TouchControls TouchControls;
 	public GameObject ThrusterL;
 	// public GameObject ThrusterR;
+	public ParticleSystem DustParticles;
+	public Transform RaycastBottom;
+	public Animator animator;
 
 	private Vector2 initialPos;
 	public Renderer rend;
@@ -42,50 +45,26 @@ public class CarController : MonoBehaviour {
 		if(ThrusterL){
 			ThrusterL.SetActive(false);
 		}
+
+		DustParticles.enableEmission = false;
 	}
 
 	
 	// Update is called once per frame
 	void Update () {
 
+		DustParticles.enableEmission = false;
 
-		// if(active){
+		if(active){
+			RaycastHit2D nearGroundHit = Physics2D.Linecast(transform.position, RaycastBottom.position, 1 << LayerMask.NameToLayer("Ground"));
 
-		// 	if(TouchControls.RightPressed) {
-
-		// 		// if(TractionFront){
-		// 		// 	motorFront.motorSpeed = speedForward*-1;
-		// 		// 	motorFront.maxMotorTorque = torqueForward;
-		// 		// 	FrontWheel.motor = motorFront;
-		// 		// }
-				
-		// 		// if(TractionBack){
-		// 		// 	motorBack.motorSpeed = speedForward*-1;
-		// 		// 	motorBack.maxMotorTorque = torqueForward;
-		// 		// 	BackWheel.motor = motorBack;
-		// 		// }
-
-				
-		// 	} else if (TouchControls.LeftPressed){
-
-		// 		// if(TractionFront){
-		// 		// 	motorFront.motorSpeed = speedBackward*-1;;
-		// 		// 	motorFront.maxMotorTorque = torqueBackward;
-		// 		// 	FrontWheel.motor = motorFront;
-		// 		// }
-
-		// 		// if(TractionBack){
-		// 		// 	motorBack.motorSpeed = speedBackward*-1;;
-		// 		// 	motorBack.maxMotorTorque = torqueBackward;
-		// 		// 	BackWheel.motor = motorBack;
-		// 		// }
-
-		// 	} else {
-		// 		// BackWheel.useMotor = false;
-		// 		// FrontWheel.useMotor = false;
-		// 	}
-
-		// }
+			if (nearGroundHit)
+			{
+				Debug.Log("HIT "+nearGroundHit.point);
+				DustParticles.enableEmission = true;
+				DustParticles.transform.position = nearGroundHit.point;
+			}
+		}
 
 	}
 
@@ -151,6 +130,7 @@ public class CarController : MonoBehaviour {
 		active = true;
 		StartCoroutine("Blink");
 		Debug.Log("activating "+gameObject.name);
+		animator.SetBool("Active",active);
 	}
 
     void Hide(){
@@ -188,6 +168,7 @@ public class CarController : MonoBehaviour {
 
     void DeactivateVehicle (){
     	active = false;
+    	animator.SetBool("Active",active);
     }
 
 

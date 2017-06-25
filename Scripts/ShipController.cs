@@ -41,23 +41,29 @@ public class ShipController : MonoBehaviour {
 
 		upSpeed = speed * 2.5f;
 
+		DustParticles.enableEmission = false;
+
 	}
 
 	void Update () {
+
 		DustParticles.enableEmission = false;
 
-		RaycastHit2D nearGroundHit = Physics2D.Linecast(transform.position, RaycastBottomFar.position, 1 << LayerMask.NameToLayer("Ground"));
-		landingDistance = Physics2D.Linecast(transform.position, RaycastBottomNear.position, 1 << LayerMask.NameToLayer("Ground"));
-		// Debug.DrawLine(transform.position, RaycastBottomNear.position, Color.red);
+		if(active){
 
-		if (nearGroundHit)
-		{
-			Debug.Log("HIT "+nearGroundHit.point);
-			DustParticles.enableEmission = true;
-			DustParticles.transform.position = nearGroundHit.point;
+			RaycastHit2D nearGroundHit = Physics2D.Linecast(transform.position, RaycastBottomFar.position, 1 << LayerMask.NameToLayer("Ground"));
+			landingDistance = Physics2D.Linecast(transform.position, RaycastBottomNear.position, 1 << LayerMask.NameToLayer("Ground"));
+			// Debug.DrawLine(transform.position, RaycastBottomNear.position, Color.red);
+
+			if (nearGroundHit)
+			{
+				Debug.Log("HIT "+nearGroundHit.point);
+				DustParticles.enableEmission = true;
+				DustParticles.transform.position = nearGroundHit.point;
+			}
+
+			animator.SetBool("NearGround", landingDistance);
 		}
-
-		animator.SetBool("NearGround", landingDistance);
 	}
 
 	
