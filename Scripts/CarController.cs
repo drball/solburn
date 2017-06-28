@@ -71,13 +71,10 @@ public class CarController : MonoBehaviour {
 	void FixedUpdate () {
 
 		if(active){
-			Debug.Log("sfsddfsfdssdf");
 
 			if(ThrusterL){
 				ThrusterL.SetActive(false);
 			}
-
-			
 
 			if(TouchControls.RightPressed) {
 
@@ -97,13 +94,13 @@ public class CarController : MonoBehaviour {
 			rb.velocity = Vector2.ClampMagnitude(rb.velocity, speedForward/10);
 
 			//--constrain the rotation
-			if( transform.rotation.z > 0.3f ){
-				Debug.Log("too far right");
-				rb.AddTorque(-4,0);
-			} else if ( transform.rotation.z < -0.3f){
-				rb.AddTorque(4,0);
-				Debug.Log("too far left");
-			}
+			// if( transform.rotation.z > 0.3f ){
+			// 	Debug.Log("too far right");
+			// 	rb.AddTorque(-4,0);
+			// } else if ( transform.rotation.z < -0.3f){
+			// 	rb.AddTorque(4,0);
+			// 	Debug.Log("too far left");
+			// }
 		}
 	}
 

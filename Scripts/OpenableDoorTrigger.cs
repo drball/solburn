@@ -25,7 +25,7 @@ public class OpenableDoorTrigger : MonoBehaviour {
 	void ToggleDoor(){
 		Debug.Log("toggling switch");
 
-		PlayerScript.DoAnimation();
+		PlayerScript.PullSwitch();
 
 		if(doorSwitch){
 			doorSwitch = false;

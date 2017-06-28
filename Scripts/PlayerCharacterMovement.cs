@@ -45,8 +45,17 @@ public class PlayerCharacterMovement : MonoBehaviour {
 
 	}
 
-	public void DoAnimation(){
+	public void PullSwitch(){
+		active = false;
+		// rb.velocity = new Vector2(0, 0);
 		animator.SetTrigger("MakePullSwitch");
+		Invoke("Continue", 1);
+	}
+
+	void Continue(){
+		//--continue after being paused
+		active = true;
+
 	}
 
 }
