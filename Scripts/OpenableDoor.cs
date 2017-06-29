@@ -5,9 +5,9 @@ using UnityEngine;
 public class OpenableDoor : MonoBehaviour {
 
 	public bool open = false;
-	public string name;
 	public GameObject DoorObj;
-	public float delay; 
+	public Animator animator;
+	public float delay = 1f; 
 
 	void Awake () {
 
@@ -16,32 +16,29 @@ public class OpenableDoor : MonoBehaviour {
 
 		open = (PlayerPrefs.GetInt("Door") == 1) ? true : false;
 
-		ChangeStatus(open);
+		ChangeStatus();
 	}
 
-	void ChangeStatus(bool newStatus){
-		open = newStatus;
+	void ChangeStatus(){
 
 		Debug.Log("open is now "+open);
 		
-		if(open) {
-			DoorObj.SetActive(false);
-		} else {
-			DoorObj.SetActive(true);
-		}
+		animator.SetBool("isOpen",open);
 
-		// PlayerPrefs.SetInt("Door", open);
+		PlayerPrefs.SetInt("Door", (open == true) ? 1 : 0);
 	}
 
 	public void Open(){
 
-		ChangeStatus(true);
+		open = true;
+		Invoke("ChangeStatus",delay);
 
 	}
 
 	public void Close(){
 
-		ChangeStatus(false);
+		open = false;
+		Invoke("ChangeStatus",delay);
 		
 	}
 

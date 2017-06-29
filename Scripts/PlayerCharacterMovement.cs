@@ -42,11 +42,16 @@ public class PlayerCharacterMovement : MonoBehaviour {
 
 		}
 	
+	}
 
+	public void Stop(){
+		//--stop the character
+		animator.SetFloat("Speed", 0);
 	}
 
 	public void PullSwitch(){
 		active = false;
+		Stop();
 		// rb.velocity = new Vector2(0, 0);
 		animator.SetTrigger("MakePullSwitch");
 		Invoke("Continue", 1);
