@@ -8,20 +8,23 @@ public class RagdollWhenHit : MonoBehaviour {
 
 	public Animator animator;
 	public GameObject body;
-	private Rigidbody2D rb;
+	// private Rigidbody2D rb;
 	private BoxCollider2D collider;
 	// public Renderer rend;
 	public bool alive = true;
 	public Vector2 initialPosition;
-	public Rigidbody2D[] childRbs;
+	// public Rigidbody2D[] childRbs;
 	public Renderer[] childRends;
 	public bool doesReset = false;
+    public GameObject RagdollRef; //--obj to clone when turning to ragdoll
+    private GameObject newRagdoll;
+    public Rigidbody2D newRagdollRb;
 
 	// Use this for initialization
 	void Start () {
-		rb = body.GetComponent<Rigidbody2D>();
+		// rb = body.GetComponent<Rigidbody2D>();
 		collider = GetComponent<BoxCollider2D>();
-		childRbs = GetComponentsInChildren<Rigidbody2D>( ) as Rigidbody2D[];
+		// childRbs = GetComponentsInChildren<Rigidbody2D>( ) as Rigidbody2D[];
 		childRends = GetComponentsInChildren<Renderer>( ) as Renderer[];
 		initialPosition = transform.localPosition;
 		// rend = GetComponent<Renderer>();
@@ -46,8 +49,11 @@ public class RagdollWhenHit : MonoBehaviour {
             if(alive){
 
             	alive = false;
+
+                Hide(); //--hide the character
         		
-		        MakeFloppy();
+		        // MakeFloppy();
+                SpawnRagdoll();
 
 				collider.enabled = false;
 
@@ -58,7 +64,7 @@ public class RagdollWhenHit : MonoBehaviour {
 		        Vector2 force = other.GetComponent<Rigidbody2D>().velocity * 10;
 		        Debug.Log("hit force = "+force);
 
-		        rb.AddForce(force, ForceMode2D.Impulse);
+		        // rb.AddForce(force, ForceMode2D.Impulse);
 
                 Debug.Log("add force "+force+" to npc");
 
@@ -114,14 +120,16 @@ public class RagdollWhenHit : MonoBehaviour {
         }
     }
 
-    void MakeFloppy(){
-    	//--make ragdoll
-    	foreach( Rigidbody2D childRb in childRbs ){
-			// childRb.gameObject.transform.parent = parentObj.transform;
-            childRb.isKinematic = false;
-            // Debug.Log("make "+childRb+" not kinematic");
-           
-        }
+    // void MakeFloppy(){
+    // 	//--make ragdoll
+    // 	foreach( Rigidbody2D childRb in childRbs ){
+    //         childRb.isKinematic = false;
+    //     }
+    // }
+
+    void SpawnRagdoll(){
+        newRagdoll = Instantiate(RagdollRef, transform.position, transform.rotation);
+        newRagdoll.transform.parent = transform;
     }
 
    //  void EnableAllRbs(){

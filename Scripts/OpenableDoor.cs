@@ -8,13 +8,16 @@ public class OpenableDoor : MonoBehaviour {
 	public GameObject DoorObj;
 	public Animator animator;
 	public float delay = 1f; 
+	public bool persistent = false;
 
 	void Awake () {
 
 		//--load from playerprefs
 
-
-		open = (PlayerPrefs.GetInt("Door") == 1) ? true : false;
+		if(persistent){
+			open = (PlayerPrefs.GetInt("Door") == 1) ? true : false;
+		}
+		
 
 		ChangeStatus();
 	}
@@ -25,7 +28,10 @@ public class OpenableDoor : MonoBehaviour {
 		
 		animator.SetBool("isOpen",open);
 
-		PlayerPrefs.SetInt("Door", (open == true) ? 1 : 0);
+		if(persistent){
+			PlayerPrefs.SetInt("Door", (open == true) ? 1 : 0);
+		}
+		
 	}
 
 	public void Open(){
