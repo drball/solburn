@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class CarController : MonoBehaviour {
@@ -60,7 +60,7 @@ public class CarController : MonoBehaviour {
 
 			if (nearGroundHit)
 			{
-				Debug.Log("HIT "+nearGroundHit.point);
+				// Debug.Log("HIT "+nearGroundHit.point);
 				DustParticles.enableEmission = true;
 				DustParticles.transform.position = nearGroundHit.point;
 			}
@@ -94,13 +94,13 @@ public class CarController : MonoBehaviour {
 			rb.velocity = Vector2.ClampMagnitude(rb.velocity, speedForward/10);
 
 			//--constrain the rotation
-			// if( transform.rotation.z > 0.3f ){
-			// 	Debug.Log("too far right");
-			// 	rb.AddTorque(-4,0);
-			// } else if ( transform.rotation.z < -0.3f){
-			// 	rb.AddTorque(4,0);
-			// 	Debug.Log("too far left");
-			// }
+			if( transform.rotation.z > 0.3f ){
+				// Debug.Log("too far right");
+				rb.AddTorque(-4,0);
+			} else if ( transform.rotation.z < -0.3f){
+				rb.AddTorque(4,0);
+				// Debug.Log("too far left");
+			}
 		}
 	}
 

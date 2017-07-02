@@ -18,7 +18,6 @@ public class RagdollWhenHit : MonoBehaviour {
 	public bool doesReset = false;
     public GameObject RagdollRef; //--obj to clone when turning to ragdoll
     private GameObject newRagdoll;
-    public Rigidbody2D newRagdollRb;
 
 	// Use this for initialization
 	void Start () {
@@ -30,119 +29,46 @@ public class RagdollWhenHit : MonoBehaviour {
 		// rend = GetComponent<Renderer>();
 	}
 	
-	// Update is called once per frame
-	// void Update () {
-	// 	if(Input.GetKey("d")){
-	//         rb.AddForce(transform.up * 10, ForceMode2D.Impulse);
-	//         Debug.Log("up!");
-	//     }
-	// }
 
 	void OnTriggerEnter2D(Collider2D other) {
 
 		// Debug.Log("other = "+other.name);
 
-        if (other.tag == "DynamicLand" || other.tag == "PlayerVehicle"){
+        if (other.tag == "DynamicLand" || (other.tag == "PlayerVehicle" && gameObject.tag != "Player")){
 
-            Debug.Log("collided with "+other.name);
+            Vector2 otherVelocity = other.GetComponent<Rigidbody2D>().velocity;
 
-            if(alive){
+            Debug.Log("collided with "+other.name+" mag = "+otherVelocity.magnitude);
+
+            if(alive && otherVelocity.magnitude > 1){
 
             	alive = false;
 
-                Hide(); //--hide the character
-        		
-		        // MakeFloppy();
+                gameObject.SetActive(false);
+
                 SpawnRagdoll();
 
-				collider.enabled = false;
-
-				if (animator){
-                    animator.enabled = false;
-                }
-				
-		        Vector2 force = other.GetComponent<Rigidbody2D>().velocity * 10;
+		        Vector2 force = otherVelocity * 10;
 		        Debug.Log("hit force = "+force);
 
-		        // rb.AddForce(force, ForceMode2D.Impulse);
+                AddImpulseForce newRagdollScript = newRagdoll.GetComponent<AddImpulseForce>();
+                newRagdollScript.AddForce(force);
 
-                Debug.Log("add force "+force+" to npc");
-
-		        // Invoke("Reset",2);
-
-        		Invoke("StartFlashing",2.5f);
-		       
+                Invoke("Reset",5);
             }
         }
-        
-    }
-
-    void StartFlashing(){
-    	Debug.Log("start flashing");
-    	StartCoroutine("Blink");
-    }
-
-    IEnumerator Blink(){
-    	Hide();
-    	yield return new WaitForSeconds(0.02f);
-    	Show();
-    	yield return new WaitForSeconds(0.02f);
-    	Hide();
-    	yield return new WaitForSeconds(0.02f);
-    	Show();
-    	yield return new WaitForSeconds(0.02f);
-    	Hide();
-    	Destroy(gameObject);
     }
 
     void Reset(){
-    		// Debug.Log("reset");
-    		// // EnableAllRbs();
-    		// animator.enabled = true;
-    		// animator.SetTrigger("MakeIdle");
-    	Destroy(gameObject);
+    	gameObject.SetActive(true);
+        alive = true;
     }
 
-    void Hide(){
-		//-disable renderer of all children
-    	foreach( Renderer childRend in childRends ){
-            childRend.enabled = false;
-            // Debug.Log("make "+childRend+" hidden");
-           
-        }
-    }
-
-    void Show(){
-		//-enable renderer of all children
-    	foreach( Renderer childRend in childRends ){
-            childRend.enabled = true;
-            // Debug.Log("make "+childRend+" show");
-        }
-    }
-
-    // void MakeFloppy(){
-    // 	//--make ragdoll
-    // 	foreach( Rigidbody2D childRb in childRbs ){
-    //         childRb.isKinematic = false;
-    //     }
-    // }
 
     void SpawnRagdoll(){
         newRagdoll = Instantiate(RagdollRef, transform.position, transform.rotation);
-        newRagdoll.transform.parent = transform;
+        // newRagdoll.transform.parent = transform;
     }
-
-   //  void EnableAllRbs(){
-
-   //  	foreach( Rigidbody2D childRb in childRbs ){
-			// // childRb.gameObject.transform.parent = parentObj.transform;
-   //          childRb.isKinematic = true;
-   //          Debug.Log("make "+childRb+" not kinematic");
-   //          childRb.angularVelocity = 0f;
-			// childRb.velocity = Vector2.zero;
-   //      }
-   //  }
-
  
 
 }

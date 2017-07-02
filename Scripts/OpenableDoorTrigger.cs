@@ -8,13 +8,16 @@ public class OpenableDoorTrigger : MonoBehaviour {
 	public bool doorSwitch = false;
 	public Animator animator;
 	public PlayerCharacterMovement PlayerScript;
+	
 	// Use this for initialization
 	void Start () {
 		// Debug.Log("the door is "+DoorScript.open);
 
 		//--set the switch to the status of the door
-		doorSwitch = DoorScript.open;
-
+		if(DoorScript){
+			doorSwitch = DoorScript.open;
+		}
+		
 		if(doorSwitch){
 			Debug.Log("switch is on");
 		} else{
@@ -27,24 +30,34 @@ public class OpenableDoorTrigger : MonoBehaviour {
 	void ToggleSwitch(){
 		Debug.Log("toggling switch");
 
-		//--show player pulling switch
-		
+		//--activate the door switch
 
 		if(doorSwitch){
 			doorSwitch = false;
-			DoorScript.Close();
+
+			if(DoorScript){
+				DoorScript.Close();
+			}
+			
 		} else{
 			doorSwitch = true;
-			DoorScript.Open();
+
+			if(DoorScript){
+				DoorScript.Open();
+			}
 		}
 
+		//--show the switch animating
 		animator.SetBool("DoorSwitch", doorSwitch);
+
+		gameObject.SendMessage("PulledSwitch");
 
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
 
 		if (other.tag == "Player"){
+			//--show player pulling switch
 			PlayerScript.PullSwitch();
 
 			//--pull switch soon, 

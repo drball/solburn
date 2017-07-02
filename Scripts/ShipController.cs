@@ -27,6 +27,7 @@ public class ShipController : MonoBehaviour {
 	public bool nearGround;
 	public bool landingDistance;
 	public ParticleSystem DustParticles;
+	private int badRotationTimer;
 
 	// Use this for initialization
 	void Start () {
@@ -43,6 +44,8 @@ public class ShipController : MonoBehaviour {
 
 		DustParticles.enableEmission = false;
 
+		InvokeRepeating("Timer", 1, 1);
+
 	}
 
 	void Update () {
@@ -50,6 +53,8 @@ public class ShipController : MonoBehaviour {
 		DustParticles.enableEmission = false;
 
 		if(active){
+
+			//--show/hide the dust effect & legs
 
 			RaycastHit2D nearGroundHit = Physics2D.Linecast(transform.position, RaycastBottomFar.position, 1 << LayerMask.NameToLayer("Ground"));
 			landingDistance = Physics2D.Linecast(transform.position, RaycastBottomNear.position, 1 << LayerMask.NameToLayer("Ground"));
@@ -63,11 +68,12 @@ public class ShipController : MonoBehaviour {
 			}
 
 			animator.SetBool("NearGround", landingDistance);
+			
 		}
 	}
 
 	
-	// Update is called once per frame
+	//--for physics movement, use FixedUpdate
 	void FixedUpdate () {
 
 
@@ -193,6 +199,25 @@ public class ShipController : MonoBehaviour {
     void DeactivateVehicle (){
     	active = false;
     	animator.SetBool("Active",active);
+    }
+
+    void Timer(){
+    	//--1 second cron
+    	//--count how long it's been upside down
+
+    	if((transform.rotation.z > 0.7) || (transform.rotation.z < -0.7)){
+			badRotationTimer++;
+		} else {
+			badRotationTimer = 0;
+		}
+
+	
+		//--restart if been on it's side for more than 3 seconds
+		if((badRotationTimer > 3) && (active == true)){
+			badRotationTimer = 0;
+			Respawn();
+		}
+
     }
 
 
