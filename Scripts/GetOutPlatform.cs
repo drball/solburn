@@ -16,7 +16,7 @@ public class GetOutPlatform : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 		//--is the other trigger a vehicle? 
 
-		if (other.name == "Van"){
+		if (other.tag == "PlayerVehicle"){
 			
 			ExitButton.SetActive(true);
 		} 
@@ -27,7 +27,7 @@ public class GetOutPlatform : MonoBehaviour {
 		//--is the other trigger a vehicle? 
 		Debug.Log("van left platform");
 
-		if (other.name == "Van"){
+		if (other.tag == "PlayerVehicle"){
 			
 			ExitButton.SetActive(false);
 		} 

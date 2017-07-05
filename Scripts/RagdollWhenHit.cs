@@ -18,6 +18,10 @@ public class RagdollWhenHit : MonoBehaviour {
 	public bool doesReset = false;
     public GameObject RagdollRef; //--obj to clone when turning to ragdoll
     private GameObject newRagdoll;
+    public bool canFall; //--can this guy turn to ragdoll if there's no collider underneath? 
+    public bool onGround;
+    public Transform RaycastBottom;
+    private Vector2 force;
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +31,17 @@ public class RagdollWhenHit : MonoBehaviour {
 		childRends = GetComponentsInChildren<Renderer>( ) as Renderer[];
 		initialPosition = transform.localPosition;
 		// rend = GetComponent<Renderer>();
+	}
+
+	void Update(){
+
+		//--check if there's ground underneath
+		onGround = Physics2D.Linecast(transform.position, RaycastBottom.position, 1 << LayerMask.NameToLayer("Ground"));
+
+		if(!onGround && canFall){
+			MakeRagdoll();
+		}
+			
 	}
 	
 
@@ -41,20 +56,8 @@ public class RagdollWhenHit : MonoBehaviour {
             Debug.Log("collided with "+other.name+" mag = "+otherVelocity.magnitude);
 
             if(alive && otherVelocity.magnitude > 1){
-
-            	alive = false;
-
-                gameObject.SetActive(false);
-
-                SpawnRagdoll();
-
-		        Vector2 force = otherVelocity * 10;
-		        Debug.Log("hit force = "+force);
-
-                AddImpulseForce newRagdollScript = newRagdoll.GetComponent<AddImpulseForce>();
-                newRagdollScript.AddForce(force);
-
-                Invoke("Reset",5);
+            	force = otherVelocity * 10;
+				MakeRagdoll();
             }
         }
     }
@@ -65,10 +68,21 @@ public class RagdollWhenHit : MonoBehaviour {
     }
 
 
-    void SpawnRagdoll(){
+    void MakeRagdoll(){
+        
+        alive = false;
+
+        gameObject.SetActive(false);
+
         newRagdoll = Instantiate(RagdollRef, transform.position, transform.rotation);
-        // newRagdoll.transform.parent = transform;
+
+        Invoke("Reset",5);
+
+        if(force.magnitude > 0){
+        	AddImpulseForce newRagdollScript = newRagdoll.GetComponent<AddImpulseForce>();
+        	newRagdollScript.AddForce(force);
+        }
+
     }
  
-
 }
