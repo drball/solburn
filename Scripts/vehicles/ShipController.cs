@@ -62,7 +62,7 @@ public class ShipController : MonoBehaviour {
 
 			if (nearGroundHit)
 			{
-				Debug.Log("HIT "+nearGroundHit.point);
+				// Debug.Log("HIT "+nearGroundHit.point);
 				DustParticles.enableEmission = true;
 				DustParticles.transform.position = nearGroundHit.point;
 			}
@@ -105,7 +105,7 @@ public class ShipController : MonoBehaviour {
 				if(TouchControls.LeftPressed) {
 
 					
-					rb.AddRelativeForce (Vector2.up * upSpeed);
+					rb.AddRelativeForce (Vector2.up * (upSpeed/1.25f));
 					rb.AddRelativeForce (Vector2.left * speed);
 				
 					// ThrustParticlesLeft.enableEmission = true;
@@ -117,7 +117,7 @@ public class ShipController : MonoBehaviour {
 
 				} else if (TouchControls.RightPressed){
 
-					rb.AddRelativeForce (Vector2.up * upSpeed);
+					rb.AddRelativeForce (Vector2.up * (upSpeed/1.25f));
 					rb.AddRelativeForce (Vector2.right * speed);
 
 					// ThrustParticlesRight.enableEmission = true;
