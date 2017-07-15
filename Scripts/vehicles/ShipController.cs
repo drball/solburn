@@ -5,7 +5,7 @@ public class ShipController : MonoBehaviour {
 
 	public Vector2 respawnPos;
 	public bool active = false;
-	public Renderer[] childRends;
+	private Renderer[] childRends;
 	public TouchControls TouchControls;
 
 	private Vector2 initialPos;
@@ -24,7 +24,6 @@ public class ShipController : MonoBehaviour {
 	public Animator animator;
 	public Transform RaycastBottomFar;
 	public Transform RaycastBottomNear;
-	public bool nearGround;
 	public bool landingDistance;
 	public ParticleSystem DustParticles;
 	private int badRotationTimer;
@@ -46,6 +45,11 @@ public class ShipController : MonoBehaviour {
 
 		InvokeRepeating("Timer", 1, 1);
 
+		if(active){
+			//--mostly for debug - if we start with this vehicle active 
+			ActivateVehicle();
+		}
+
 	}
 
 	void Update () {
@@ -65,6 +69,7 @@ public class ShipController : MonoBehaviour {
 				// Debug.Log("HIT "+nearGroundHit.point);
 				DustParticles.enableEmission = true;
 				DustParticles.transform.position = nearGroundHit.point;
+	
 			}
 
 			animator.SetBool("NearGround", landingDistance);
@@ -159,7 +164,7 @@ public class ShipController : MonoBehaviour {
 	public void ActivateVehicle(){
 		active = true;
 		StartCoroutine("Blink");
-		Debug.Log("activating "+gameObject.name);
+		// Debug.Log("activating "+gameObject.name);
 		animator.SetBool("Active",active);
 	}
 
@@ -167,7 +172,7 @@ public class ShipController : MonoBehaviour {
 		//-disable renderer of all children
     	foreach( Renderer childRend in childRends ){
             childRend.enabled = false;
-            Debug.Log("make "+childRend+" hidden");
+            // Debug.Log("make "+childRend+" hidden");
         }
         rend.enabled = false;
     }
@@ -176,13 +181,13 @@ public class ShipController : MonoBehaviour {
 		//-enable renderer of all children
     	foreach( Renderer childRend in childRends ){
             childRend.enabled = true;
-            Debug.Log("make "+childRend+" show");
+            // Debug.Log("make "+childRend+" show");
         }
         rend.enabled = true;
     }
 
     IEnumerator Blink(){
-    	Debug.Log("starting blink");
+    	// Debug.Log("starting blink");
     	Hide();
     	yield return new WaitForSeconds(0.05f);
     	Show();

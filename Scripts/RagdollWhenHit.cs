@@ -49,7 +49,7 @@ public class RagdollWhenHit : MonoBehaviour {
 
 		// Debug.Log("other = "+other.name);
 
-        if (other.tag == "DynamicLand" || (other.tag == "PlayerVehicle" && gameObject.tag != "Player")){
+        if (other.tag == "DynamicLand" || other.tag == "Pickuppable" || (other.tag == "PlayerVehicle" && gameObject.tag != "Player")){
 
             Vector2 otherVelocity = other.GetComponent<Rigidbody2D>().velocity;
 

@@ -35,6 +35,7 @@ public class PlayerCharacterMovement : MonoBehaviour {
 
 			if (TouchControls.LeftPressed && TouchControls.RightPressed){
 				rb.AddRelativeForce (Vector2.up * upForce);
+				rb.AddRelativeForce (transform.localScale * 8);
 				animator.SetBool("Fly", true);
 			} else {
 				if(TouchControls.RightPressed) {

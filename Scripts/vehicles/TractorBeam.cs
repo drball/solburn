@@ -7,56 +7,40 @@ public class TractorBeam : MonoBehaviour {
 	public bool isActive = false;
 	public SpringJoint2D joint;
 	public GameObject target;
+	public CargoScript CargoScript;
+	public GameObject DropButton;
 	public LineRenderer lineRenderer;
 	public Material beamMaterial;
-	private float beamWidth = 0.05f;
 	public ShipController ShipController;
 	private Rigidbody2D targetRb;
-	private int cancelTimer;
-	// private Vector3 heading;
+	private int cancelTimer; //--counting an inactive cargo
+
 
 	// Use this for initialization
 	void Start () {
 		joint.enabled = false;
-
-		// //--use linerenderer for the beam 
-		// lineRenderer = gameObject.AddComponent<LineRenderer>();
-		// lineRenderer.material = beamMaterial;
 
 		InvokeRepeating("Timer", 1, 1);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKey("c")){
-	        //activate spring joint with target
-
-	        if(isActive){
-				disableTractorBeam();
-        	}else {
-        		enableTractorBeam();
-        	}
-
-	        enableTractorBeam();
-	    }
 
 	    if(isActive){
-	    	lineRenderer.SetVertexCount(2);
+			lineRenderer.numPositions = 2;
 			lineRenderer.SetPosition(0, target.transform.position);
 			lineRenderer.SetPosition(1, transform.position);	
 			// lineRenderer.SetWidth(beamWidth, beamWidth);
 			// lineRenderer.sortingLayerName = "Player Character";
 
 			//check if target is higher than player
-			Debug.Log("dir = "+(target.transform.position.y - transform.position.y));
 			if ((target.transform.position.y - transform.position.y) > 0.5f) {
 				disableTractorBeam();
 			};
 			
 			
-
 	    } else {
-	    	lineRenderer.SetVertexCount(0);
+	    	lineRenderer.numPositions = 0;
 	    }
 	}
 
@@ -66,23 +50,32 @@ public class TractorBeam : MonoBehaviour {
 		isActive = true;
 		targetRb = target.GetComponent<Rigidbody2D>();
 		joint.connectedBody = targetRb;
+		DropButton.SetActive(true);
 	}
 
 	void disableTractorBeam(){
 
 		joint.enabled = false;
 		isActive = false;
+		DropButton.SetActive(false);
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
 
 		if(ShipController.active){
 			
-			if (other.name == "wire crate"){
+			if (other.tag == "Pickuppable"){
 				// Debug.Log("ufo collided with "+other.name);
 
 				target = other.gameObject;
-				enableTractorBeam();
+				CargoScript = target.GetComponent<CargoScript>();
+
+				if(CargoScript.isCollectable){
+					enableTractorBeam();
+				} else {
+					Debug.Log(target.name+" is not collectable");
+				}
+				
 			}
 		}
 	}
@@ -98,9 +91,14 @@ public class TractorBeam : MonoBehaviour {
 				cancelTimer = 0;
 			}
 
-			if(cancelTimer > 2){
-				// disableTractorBeam();
+			if(cancelTimer > 3){
+				disableTractorBeam();
 			}
 		}
+	}
+
+	public void Drop(){
+		Debug.Log("tractor beam is dropping cargo");
+		disableTractorBeam();
 	}
 }

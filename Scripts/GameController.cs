@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour {
 
 	public GameObject CurrentVehicle;
 	public Vector2 respawnPos;
+	public TractorBeam TractorBeam;
 
 	// Use this for initialization
 	void Start () {
@@ -21,6 +22,14 @@ public class GameController : MonoBehaviour {
 
 	public void RespawnPressed(){
 		CurrentVehicle.SendMessage("Respawn");
+	}
+
+	public void VehicleDrop(){
+		//--tells current vehicle to drop the current cargo
+		if(CurrentVehicle.GetComponentInChildren<TractorBeam>()){
+			CurrentVehicle.GetComponentInChildren<TractorBeam>().SendMessage("Drop");
+		}
+		
 	}
 
 
