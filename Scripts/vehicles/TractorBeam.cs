@@ -34,7 +34,8 @@ public class TractorBeam : MonoBehaviour {
 			// lineRenderer.sortingLayerName = "Player Character";
 
 			//check if target is higher than player
-			if ((target.transform.position.y - transform.position.y) > 0.5f) {
+			if ((target.transform.position.y - transform.position.y) > -0.25f) {
+				Debug.Log("diff = "+(target.transform.position.y - transform.position.y));
 				disableTractorBeam();
 			};
 			

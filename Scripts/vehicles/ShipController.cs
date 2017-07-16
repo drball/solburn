@@ -225,5 +225,12 @@ public class ShipController : MonoBehaviour {
 
     }
 
+    public void HitByBullet(Vector3 force){
+  //   	//--knock back a bit if hit by bullet - from a SendMessage
+
+		rb.AddForce(force * 4f, ForceMode2D.Impulse);
+    }
+
+
 
 }

@@ -14,12 +14,16 @@ public class PlayerCharacterMovement : MonoBehaviour {
 	public float upForce = 1;
 	public Transform RaycastBottom;
 	public bool onGround;
+	public Bar EnergyBar; //--script on the UI energy bar
+	public int EnergyMax = 300;
+	public int EnergyCurrent;
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D>();
 		initialScale = transform.localScale;
 		reverseScale = new Vector3(-initialScale.x, initialScale.y, initialScale.z);
+		EnergyCurrent = EnergyMax;
 	}
 
 	void Update(){
@@ -34,9 +38,15 @@ public class PlayerCharacterMovement : MonoBehaviour {
 		if(active){
 
 			if (TouchControls.LeftPressed && TouchControls.RightPressed){
-				rb.AddRelativeForce (Vector2.up * upForce);
-				rb.AddRelativeForce (transform.localScale * 8);
-				animator.SetBool("Fly", true);
+
+				if(EnergyCurrent > 0){
+					rb.AddRelativeForce (Vector2.up * upForce);
+					rb.AddRelativeForce (transform.localScale * 8);
+					animator.SetBool("Fly", true);
+					EnergyCurrent--;
+					EnergyBar.UpdateBar(EnergyCurrent, EnergyMax);
+				}
+
 			} else {
 				if(TouchControls.RightPressed) {
 
@@ -50,10 +60,17 @@ public class PlayerCharacterMovement : MonoBehaviour {
 
 				animator.SetBool("Fly", false);
 				animator.SetFloat("Speed", Mathf.Abs(rb.velocity.magnitude));
-			}
+				
+				if(EnergyCurrent < EnergyMax){
+					EnergyCurrent += 2;
 
+					if (EnergyCurrent > EnergyMax){
+						EnergyCurrent = EnergyMax;
+					}
+					EnergyBar.UpdateBar(EnergyCurrent, EnergyMax);
+				} 
+			}
 		}
-	
 	}
 
 	public void Stop(){
