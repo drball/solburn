@@ -39,7 +39,7 @@ public class ShipController : MonoBehaviour {
 		ThrustParticlesLeft.enableEmission = false;
 		ThrustParticlesRight.enableEmission = false;
 
-		upSpeed = speed * 2.5f;
+		upSpeed = speed * 1.6f;
 
 		DustParticles.enableEmission = false;
 
@@ -226,8 +226,7 @@ public class ShipController : MonoBehaviour {
     }
 
     public void HitByBullet(Vector3 force){
-  //   	//--knock back a bit if hit by bullet - from a SendMessage
-
+  //   	//--knock back a bit if hit by bullet 
 		rb.AddForce(force * 4f, ForceMode2D.Impulse);
     }
 

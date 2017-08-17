@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour {
 
-	private float speed = 250f;
+	private float speed = 500f;
 	public Rigidbody2D rb;
 	public GameObject Explosion;
 
@@ -36,7 +36,8 @@ public class BulletScript : MonoBehaviour {
 
             	Destroy(gameObject);
     		} else if (other.GetComponent<PlayerCharacterMovement>()) {
-
+    		
+    			HitPlayer();
     		}
 
     		
@@ -44,6 +45,16 @@ public class BulletScript : MonoBehaviour {
 			if(other.GetComponent<AddImpulseForce>()){
 				other.GetComponent<AddImpulseForce>().AddForce(rb.velocity);
 			}
-        }
+        } 
+    }
+
+    public void HitPlayer(){
+
+    	//--player looks for triggeEnters too, and sometimes it gets hit by bullet before bullet detects it
+    	GameObject exp = Instantiate(Explosion, transform.position, transform.rotation);
+
+		exp.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+		
+    	Destroy(gameObject);
     }
 }

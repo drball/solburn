@@ -89,7 +89,8 @@ public class PlayerCharacterMovement : MonoBehaviour {
 	void Continue(){
 		//--continue after being paused
 		active = true;
-
 	}
+
+
 
 }

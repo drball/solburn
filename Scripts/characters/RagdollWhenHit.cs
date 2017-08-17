@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//-- removes kinematic from all subobjects when hit 
+//-- is replaced with a ragdoll character
 //-- requires a box collider on the parent object set to trigger
 
 public class RagdollWhenHit : MonoBehaviour {
 
 	public Animator animator;
-	public GameObject body;
+	// public GameObject body;
 	// private Rigidbody2D rb;
 	private BoxCollider2D collider;
 	// public Renderer rend;
@@ -22,6 +22,7 @@ public class RagdollWhenHit : MonoBehaviour {
     public bool onGround;
     public Transform RaycastBottom;
     private Vector2 force;
+    public CameraController CameraController;
 
 	// Use this for initialization
 	void Start () {
@@ -49,15 +50,19 @@ public class RagdollWhenHit : MonoBehaviour {
 
 		// Debug.Log("other = "+other.name);
 
-        if (other.tag == "DynamicLand" || other.tag == "Pickuppable" || (other.tag == "PlayerVehicle" && gameObject.tag != "Player")){
+        if (other.tag == "DynamicLand" || other.tag == "Pickuppable" || (other.tag == "PlayerVehicle" && gameObject.tag != "Player" || other.tag == "Bullet")){
 
             Vector2 otherVelocity = other.GetComponent<Rigidbody2D>().velocity;
 
             Debug.Log("collided with "+other.name+" mag = "+otherVelocity.magnitude);
 
             if(alive && otherVelocity.magnitude > 1){
-            	force = otherVelocity * 10;
+            	force = otherVelocity * 17;
 				MakeRagdoll();
+            }
+
+            if(other.GetComponent<BulletScript>()){
+            	other.GetComponent<BulletScript>().HitPlayer();	
             }
         }
     }
@@ -81,6 +86,14 @@ public class RagdollWhenHit : MonoBehaviour {
         if(force.magnitude > 0){
         	AddImpulseForce newRagdollScript = newRagdoll.GetComponent<AddImpulseForce>();
         	newRagdollScript.AddForce(force);
+            force = new Vector2(0,0);
+        }
+
+        if(CameraController){
+        	Debug.Log("switch camera to follow ragdoll");
+
+        	Transform body = newRagdoll.transform.Find("body");
+        	CameraController.SwitchFollow(body.gameObject);
         }
 
     }

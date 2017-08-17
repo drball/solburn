@@ -16,9 +16,9 @@ public class CameraController : MonoBehaviour
     private Vector3 m_CurrentVelocity;
     private Vector3 m_LookAheadPos;
 
-    private float closeZoom = 5f;
-    private float midZoom = 6.5f;
-    private float farZoom = 10f;
+    private float closeZoom = 9f;
+    private float midZoom = 11f;
+    private float farZoom = 17f;
     
     public float zoomTarget;
 
@@ -34,7 +34,7 @@ public class CameraController : MonoBehaviour
 
         zoomTarget = closeZoom;
 
-        if(target.gameObject.name == "Ship"){
+        if(target.gameObject.name == "Ship" || target.gameObject.name == "UFO"){
 			Debug.Log("camera zoom out");
 			zoomTarget = farZoom;
 		} else if (target.gameObject.name == "Van") {
@@ -65,6 +65,7 @@ public class CameraController : MonoBehaviour
 
         Vector3 aheadTargetPos = target.position + m_LookAheadPos + Vector3.forward*m_OffsetZ + Vector3.up*upOffset;
         Vector3 newPos = Vector3.SmoothDamp(transform.position, aheadTargetPos, ref m_CurrentVelocity, damping);
+        // Vector3 newPos = Vector3.SmoothDamp(transform.position, new Vector3(transform.position.x, aheadTargetPos.y, aheadTargetPos.z), ref m_CurrentVelocity, damping);
 
         transform.position = newPos;
 
