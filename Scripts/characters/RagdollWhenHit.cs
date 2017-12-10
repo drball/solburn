@@ -9,7 +9,7 @@ public class RagdollWhenHit : MonoBehaviour {
 	public Animator animator;
 	// public GameObject body;
 	// private Rigidbody2D rb;
-	private BoxCollider2D collider;
+	private BoxCollider2D coll;
 	// public Renderer rend;
 	public bool alive = true;
 	public Vector2 initialPosition;
@@ -27,7 +27,7 @@ public class RagdollWhenHit : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		// rb = body.GetComponent<Rigidbody2D>();
-		collider = GetComponent<BoxCollider2D>();
+		coll = GetComponent<BoxCollider2D>();
 		// childRbs = GetComponentsInChildren<Rigidbody2D>( ) as Rigidbody2D[];
 		childRends = GetComponentsInChildren<Renderer>( ) as Renderer[];
 		initialPosition = transform.localPosition;

@@ -27,7 +27,7 @@ public class TractorBeam : MonoBehaviour {
 	void Update () {
 
 	    if(isActive){
-			lineRenderer.numPositions = 2;
+			lineRenderer.positionCount = 2;
 			lineRenderer.SetPosition(0, target.transform.position);
 			lineRenderer.SetPosition(1, transform.position);	
 			// lineRenderer.SetWidth(beamWidth, beamWidth);
@@ -41,7 +41,7 @@ public class TractorBeam : MonoBehaviour {
 			
 			
 	    } else {
-	    	lineRenderer.numPositions = 0;
+	    	lineRenderer.positionCount = 0;
 	    }
 	}
 
