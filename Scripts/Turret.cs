@@ -28,12 +28,13 @@ public class Turret : MonoBehaviour {
 
 		if(isActive){
 
+			//--get angle towards target
 			var angle = Mathf.Atan2(target.transform.position.y - transform.position.y, target.transform.position.x - transform.position.x) * Mathf.Rad2Deg;
 
-			// Debug.Log("Angle = "+angle);
-	 		// transform.rotation = Quaternion.Euler(0f, 0f, angle);
+			//--rotate towards target
 	 		transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, 0f, angle), Time.time * turnSpeed);
 
+ 			//--flip if on other side
 	 		if(angle > 90 || angle < -90){
 				transform.localScale = reverseScale;
 	 		} else {
@@ -58,7 +59,7 @@ public class Turret : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 
 		if(isActive == false){
-			if (other.tag == "Player" || other.tag == "PlayerVehicle"){
+			if (other.tag == "Player" || other.tag == "PlayerVehicle" || other.tag == "NPC"){
 				target = other.gameObject;
 				isActive = true;
 				Flasher.enableEmission = true;

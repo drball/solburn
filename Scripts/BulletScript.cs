@@ -41,9 +41,9 @@ public class BulletScript : MonoBehaviour {
     		}
 
     		
-        } else if (other.tag == "Crate"){
+        } else if (other.tag == "Crate" || other.tag == "NPC"){
 			if(other.GetComponent<AddImpulseForce>()){
-				other.GetComponent<AddImpulseForce>().AddForce(rb.velocity);
+				other.GetComponent<AddImpulseForce>().AddForce(rb.velocity*15f);
 			}
         } 
     }
