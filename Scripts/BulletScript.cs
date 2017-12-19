@@ -5,8 +5,10 @@ using UnityEngine;
 public class BulletScript : MonoBehaviour {
 
 	private float speed = 500f;
+	private Vector3 explodePos; //--the position it explodes (if hit something other than trigger)
 	public Rigidbody2D rb;
 	public GameObject Explosion;
+	public GameObject ExplosionSelf;
 
 	// Use this for initialization
 	void Start () {
@@ -44,17 +46,27 @@ public class BulletScript : MonoBehaviour {
         } else if (other.tag == "Crate" || other.tag == "NPC"){
 			if(other.GetComponent<AddImpulseForce>()){
 				other.GetComponent<AddImpulseForce>().AddForce(rb.velocity*15f);
+				DestroySelf();
 			}
         } 
+    }
+
+    void OnCollisionEnter2D(Collision2D coll) {
+        DestroySelf();
+    }
+
+    void DestroySelf(){
+    	
+		GameObject exp = Instantiate(ExplosionSelf, transform.position, transform.rotation);
+
+		exp.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+		
+    	Destroy(gameObject);
     }
 
     public void HitPlayer(){
 
     	//--player looks for triggeEnters too, and sometimes it gets hit by bullet before bullet detects it
-    	GameObject exp = Instantiate(Explosion, transform.position, transform.rotation);
-
-		exp.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
-		
-    	Destroy(gameObject);
+    	DestroySelf();
     }
 }

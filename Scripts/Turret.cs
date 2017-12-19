@@ -52,6 +52,7 @@ public class Turret : MonoBehaviour {
 	 	} else {
 	 		Flasher.enableEmission = false;
 	 		CancelInvoke("Shoot");
+	 		target = null;
 	 	}
 
 	}
@@ -64,6 +65,15 @@ public class Turret : MonoBehaviour {
 				isActive = true;
 				Flasher.enableEmission = true;
 				InvokeRepeating("Shoot", fireRate, 1);
+			}
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D other) {
+
+		if(isActive == true){
+			if (other == target){
+				isActive = false;
 			}
 		}
 	}
