@@ -27,6 +27,8 @@ public class ShipController : MonoBehaviour {
 	public bool landingDistance;
 	public ParticleSystem DustParticles;
 	private int badRotationTimer;
+	public AudioSource EngineSfx; 
+	private float EngineSfxVolume = 0.3f;
 
 	// Use this for initialization
 	void Start () {
@@ -49,6 +51,8 @@ public class ShipController : MonoBehaviour {
 			//--mostly for debug - if we start with this vehicle active 
 			ActivateVehicle();
 		}
+
+		EngineSfx.volume = 0;
 
 	}
 
@@ -93,6 +97,7 @@ public class ShipController : MonoBehaviour {
 			if (TouchControls.LeftPressed && TouchControls.RightPressed){
 
 				rb.AddRelativeForce (Vector2.up * upSpeed);
+				EngineSfx.volume = EngineSfxVolume;
 
 				// ThrustParticlesLeft.enableEmission = true;
 				// ThrustParticlesRight.enableEmission = true;
@@ -107,9 +112,10 @@ public class ShipController : MonoBehaviour {
 				}
 
 			} else {
+
 				if(TouchControls.LeftPressed) {
 
-					
+					EngineSfx.volume = EngineSfxVolume;
 					rb.AddRelativeForce (Vector2.up * (upSpeed/1.25f));
 					rb.AddRelativeForce (Vector2.left * speed);
 				
@@ -122,6 +128,7 @@ public class ShipController : MonoBehaviour {
 
 				} else if (TouchControls.RightPressed){
 
+					EngineSfx.volume = EngineSfxVolume;
 					rb.AddRelativeForce (Vector2.up * (upSpeed/1.25f));
 					rb.AddRelativeForce (Vector2.right * speed);
 
@@ -136,6 +143,7 @@ public class ShipController : MonoBehaviour {
 
 					ThrusterL.SetActive(false);
 					ThrusterR.SetActive(false);
+					EngineSfx.volume = 0;
 
 					if( transform.rotation.z > 0.1f ){
 						rb.AddTorque(-rotationSpeed*2,0);
@@ -144,6 +152,7 @@ public class ShipController : MonoBehaviour {
 					}
 
 				}
+
 			}
 
 		}

@@ -12,7 +12,7 @@ public class BulletScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Destroy(gameObject,2);
+		Destroy(gameObject,3);
 
 		rb.AddForce(transform.right * speed);
 	}
